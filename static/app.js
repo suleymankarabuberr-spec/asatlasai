@@ -42,3 +42,8 @@ async function send() {
 
     input.value = "";
 }
+document.getElementById("message").addEventListener("keypress", function(event) {
+    if (event.key === "Enter") {
+        send();
+    }
+});
