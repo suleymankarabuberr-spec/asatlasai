@@ -24,12 +24,5 @@ async def home():
 @app.post("/chat")
 async def chat():
     return {
-        "response": "Merhaba! Ben asATLASAI 🚀 Yakında GPT destekli gerçek yapay zekâ olarak hizmet vereceğim."
-    }
-
-
-@app.get("/health")
-async def health():
-    return {
-        "status": "online"
+        "response": "Merhaba! Ben asATLASAI 🚀"
     }
