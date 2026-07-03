@@ -1,8 +1,7 @@
-from fastapi import FastAPI, Request
-from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import HTMLResponse
+from fastapi import FastAPI
+from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
-from fastapi.templating import Jinja2Templates
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI(title="asATLASAI")
 
@@ -14,18 +13,23 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Static ve Templates klasörleri
 app.mount("/static", StaticFiles(directory="static"), name="static")
-templates = Jinja2Templates(directory="templates")
 
 
-@app.get("/", response_class=HTMLResponse)
-async def home(request: Request):
-    return templates.TemplateResponse("index.html", {"request": request})
+@app.get("/")
+async def home():
+    return FileResponse("templates/index.html")
 
 
 @app.post("/chat")
 async def chat():
     return {
         "response": "Merhaba! Ben asATLASAI 🚀 Yakında GPT destekli gerçek yapay zekâ olarak hizmet vereceğim."
+    }
+
+
+@app.get("/health")
+async def health():
+    return {
+        "status": "online"
     }
