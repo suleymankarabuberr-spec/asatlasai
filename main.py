@@ -1,8 +1,8 @@
 from fastapi import FastAPI
-from pydantic import BaseModel
-from fastapi.responses import FileResponse
-from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
+import os
+from openai import OpenAI
 
 app = FastAPI(title="asATLASAI")
 
@@ -14,20 +14,28 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.mount("/static", StaticFiles(directory="static"), name="static")
-
+# OpenAI client
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 class ChatRequest(BaseModel):
     message: str
 
+@app.post("/chat")
+async def chat(req: ChatRequest):
+
+    response = client.chat.completions.create(
+        model="gpt-4o-mini",
+        messages=[
+            {"role": "system", "content": "Sen asATLASAI adında yardımcı bir yapay zekasın."},
+            {"role": "user", "content": req.message}
+        ]
+    )
+
+    return {
+        "response": response.choices[0].message.content
+    }
+
 
 @app.get("/")
 async def home():
-    return FileResponse("templates/index.html")
-
-
-@app.post("/chat")
-async def chat(req: ChatRequest):
-    return {
-        "response": f"Şunu söyledin: {req.message}"
-    }
+    return {"status": "asATLASAI running 🚀"}
