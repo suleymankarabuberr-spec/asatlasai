@@ -6,7 +6,6 @@ from fastapi.templating import Jinja2Templates
 
 app = FastAPI(title="asATLASAI")
 
-# CORS
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -15,35 +14,18 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Static dosyalar
+# Static ve Templates klasörleri
 app.mount("/static", StaticFiles(directory="static"), name="static")
-
-# HTML şablonları
 templates = Jinja2Templates(directory="templates")
 
 
-# Ana sayfa
 @app.get("/", response_class=HTMLResponse)
 async def home(request: Request):
-    return templates.TemplateResponse(
-        "index.html",
-        {"request": request}
-    )
+    return templates.TemplateResponse("index.html", {"request": request})
 
 
-# Sohbet API
 @app.post("/chat")
 async def chat():
     return {
-        "response": "Merhaba Süleyman 👋 Ben asATLASAI. Artık canlı çalışıyorum! 🚀"
-    }
-
-
-# Sağlık kontrolü
-@app.get("/health")
-async def health():
-    return {
-        "status": "online",
-        "ai": "asATLASAI",
-        "version": "1.0.0"
+        "response": "Merhaba! Ben asATLASAI 🚀 Yakında GPT destekli gerçek yapay zekâ olarak hizmet vereceğim."
     }
