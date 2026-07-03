@@ -9,7 +9,13 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
+@app.get("/")
+def home():
+    return {
+        "name": "asATLASAI",
+        "status": "online",
+        "message": "Merhaba! asATLASAI çalışıyor. 🚀"
+    }
 @app.post("/chat")
 def chat():
     return {"response": "asATLASAI canlıda çalışıyor 🚀"}
